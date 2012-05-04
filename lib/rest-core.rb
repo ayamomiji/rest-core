@@ -48,6 +48,7 @@ module RestCore
   autoload :FollowRedirect, 'rest-core/middleware/follow_redirect'
   autoload :JsonRequest   , 'rest-core/middleware/json_request'
   autoload :JsonDecode    , 'rest-core/middleware/json_decode'
+  autoload :MethodOverride , 'rest-core/middleware/method_override'
   autoload :Oauth1Header  , 'rest-core/middleware/oauth1_header'
   autoload :Oauth2Header  , 'rest-core/middleware/oauth2_header'
   autoload :Oauth2Query   , 'rest-core/middleware/oauth2_query'
