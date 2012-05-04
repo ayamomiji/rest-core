@@ -36,4 +36,28 @@ describe RC::MethodOverride do
                                           'pay' => 'load'})
     end
   end
+
+  describe do
+    before do
+      @app = RC::MethodOverride.new(RC::Dry.new, :always)
+    end
+
+    should 'still override with post if request payload is blank' do
+      RC::MethodOverride::OVERRIDE_METHODS.each do |method|
+        @app.call(@env.merge(RC::REQUEST_METHOD => method)).
+          should.eq(RC::REQUEST_METHOD => :post,
+                    RC::REQUEST_PAYLOAD => {'_method' => method.to_s})
+      end
+    end
+
+    should 'override with post if request payload is present' do
+      RC::MethodOverride::OVERRIDE_METHODS.each do |method|
+        @app.call(@env.merge(RC::REQUEST_METHOD => method,
+                             RC::REQUEST_PAYLOAD => {'pay' => 'load'})).
+          should.eq(RC::REQUEST_METHOD => :post,
+                    RC::REQUEST_PAYLOAD => {'_method' => method.to_s,
+                                            'pay' => 'load'})
+      end
+    end
+  end
 end

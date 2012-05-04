@@ -14,7 +14,8 @@ class RestCore::MethodOverride
 
     method = env[REQUEST_METHOD]
     payload = env[REQUEST_PAYLOAD] || {}
-    if OVERRIDE_METHODS.include?(method) && payload.any?
+    if OVERRIDE_METHODS.include?(method) &&
+        (method_override(env) == :always || payload.any?)
       env = env.merge(
         REQUEST_METHOD  => :post,
         REQUEST_PAYLOAD => payload.merge('_method' => method.to_s))
