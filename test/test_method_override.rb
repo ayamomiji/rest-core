@@ -37,6 +37,19 @@ describe RC::MethodOverride do
     end
   end
 
+  should 'merge query into payload' do
+    RC::MethodOverride::OVERRIDE_METHODS.each do |method|
+      @app.call(@env.merge(RC::REQUEST_METHOD  => method,
+                           RC::REQUEST_QUERY   => {'q'   => 'uery'},
+                           RC::REQUEST_PAYLOAD => {'pay' => 'load'})).
+        should.eq(RC::REQUEST_METHOD  => :post,
+                  RC::REQUEST_QUERY   => {'q'   => 'uery'},
+                  RC::REQUEST_PAYLOAD => {'_method' => method.to_s,
+                                          'q'       => 'uery',
+                                          'pay'     => 'load'})
+    end
+  end
+
   describe do
     before do
       @app = RC::MethodOverride.new(RC::Dry.new, :always)
